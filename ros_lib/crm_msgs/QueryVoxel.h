@@ -1,0 +1,131 @@
+#ifndef _ROS_SERVICE_QueryVoxel_h
+#define _ROS_SERVICE_QueryVoxel_h
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include "ros/msg.h"
+
+namespace crm_msgs
+{
+
+static const char QUERYVOXEL[] = "crm_msgs/QueryVoxel";
+
+  class QueryVoxelRequest : public ros::Msg
+  {
+    public:
+      typedef uint32_t _index_type;
+      _index_type index;
+
+    QueryVoxelRequest():
+      index(0)
+    {
+    }
+
+    virtual int serialize(unsigned char *outbuffer) const override
+    {
+      int offset = 0;
+      *(outbuffer + offset + 0) = (this->index >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (this->index >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->index >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->index >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->index);
+      return offset;
+    }
+
+    virtual int deserialize(unsigned char *inbuffer) override
+    {
+      int offset = 0;
+      this->index =  ((uint32_t) (*(inbuffer + offset)));
+      this->index |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      this->index |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+      this->index |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+      offset += sizeof(this->index);
+     return offset;
+    }
+
+    virtual const char * getType() override { return QUERYVOXEL; };
+    virtual const char * getMD5() override { return "ad7b979103dbd563a352ef5270716728"; };
+
+  };
+
+  class QueryVoxelResponse : public ros::Msg
+  {
+    public:
+      typedef float _mean_type;
+      _mean_type mean;
+      typedef float _std_type;
+      _std_type std;
+
+    QueryVoxelResponse():
+      mean(0),
+      std(0)
+    {
+    }
+
+    virtual int serialize(unsigned char *outbuffer) const override
+    {
+      int offset = 0;
+      union {
+        float real;
+        uint32_t base;
+      } u_mean;
+      u_mean.real = this->mean;
+      *(outbuffer + offset + 0) = (u_mean.base >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (u_mean.base >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (u_mean.base >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (u_mean.base >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->mean);
+      union {
+        float real;
+        uint32_t base;
+      } u_std;
+      u_std.real = this->std;
+      *(outbuffer + offset + 0) = (u_std.base >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (u_std.base >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (u_std.base >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (u_std.base >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->std);
+      return offset;
+    }
+
+    virtual int deserialize(unsigned char *inbuffer) override
+    {
+      int offset = 0;
+      union {
+        float real;
+        uint32_t base;
+      } u_mean;
+      u_mean.base = 0;
+      u_mean.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      u_mean.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      u_mean.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+      u_mean.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+      this->mean = u_mean.real;
+      offset += sizeof(this->mean);
+      union {
+        float real;
+        uint32_t base;
+      } u_std;
+      u_std.base = 0;
+      u_std.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      u_std.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      u_std.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+      u_std.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+      this->std = u_std.real;
+      offset += sizeof(this->std);
+     return offset;
+    }
+
+    virtual const char * getType() override { return QUERYVOXEL; };
+    virtual const char * getMD5() override { return "ffdcf58da9b23340500de0d9d6d1f577"; };
+
+  };
+
+  class QueryVoxel {
+    public:
+    typedef QueryVoxelRequest Request;
+    typedef QueryVoxelResponse Response;
+  };
+
+}
+#endif

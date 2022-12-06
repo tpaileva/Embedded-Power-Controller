@@ -1,0 +1,25 @@
+<!--DOCTYPE html-->
+<launch>
+  <arg name="robot_namespace" default="robot"/>
+
+  <group ns="$(arg robot_namespace)">
+    <node name="power_board"
+          pkg="rosserial_python"
+          type="serial_node.py"
+          respawn="true"
+          output="screen">
+      <param name="port" value="/dev/ttyPowerBoard"/>
+      <param name="baud" value="115200"/>
+
+      <!-- Subscribers -->
+      <remap from ="led/request"           to ="/$(arg robot_namespace)/led/request"           />
+      <remap from ="e_stop/tier1_request"  to ="/$(arg robot_namespace)/e_stop/tier1_request"  />
+
+      <!-- Publishers -->
+      <remap from ="power_board/status"  to ="/$(arg robot_namespace)/power_board/status" />
+      <remap from ="e_stop/status"       to ="/$(arg robot_namespace)/e_stop/status"      />
+      
+    </node>
+  </group>
+
+</launch>
